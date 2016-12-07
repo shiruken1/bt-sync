@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+#
+# Autoconnects A Bluetooth Device Upon Detection
+# Based on Takkat Nebuk's script, as posted on http://askubuntu.com/a/8428
+# License: GPLv3
+# bt-sync <MAC> <timeout in seconds>
+
+import subprocess
+import time
+import sys
+import string
+
+cli_options = sys.argv
+
+def main():
+    MAC = cli_options[1]
+    timeout = cli_options[2]
+    scan_arg = ['hidd --show | grep ' + MAC]
+    connection_arg = ['sudo hidd --connect ' + MAC]
+    err = False
+    while err == False:
+        if subprocess.call(scan_arg, shell=True) != 0:
+            subprocess.call(connection_arg, shell=True)
+        time.sleep(int(timeout))
+    exit()
+
+if __name__ == "__main__":
+    main()
